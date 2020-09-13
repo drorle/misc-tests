@@ -1,0 +1,43 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "analysisServicesServerName": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "analysisServicesSkuName": {
+            "type": "string"
+        },
+        "analysisServicesCapacity": {
+            "type": "int"
+        },
+        "servicePrincipalClientId": {
+            "type": "string"
+        },
+        "servicePrincipalTenantId": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('analysisServicesServerName')]",
+            "type": "Microsoft.AnalysisServices/servers",
+            "apiVersion": "2017-08-01",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('analysisServicesSkuName')]",
+                "capacity": "[parameters('analysisServicesCapacity')]"
+            },
+            "properties": {
+                "asAdministrators": {
+                    "members": [
+                        "[concat('app:', parameters('servicePrincipalClientId'), '@', parameters('servicePrincipalTenantId'))]"
+                    ]
+                }
+            }
+        }
+    ]
+}
